@@ -39,7 +39,7 @@
 </div>
 <!--{/if}-->
 <!--{/loop}-->
+<!--{if $nextpage}-->
+<a  id="nextpage" href="javascript:;" data-nextpage="$nextpage" data-morepath="$morepath" class="weui-btn weui-btn_default weui-btn_loading" onClick="nextPageLoad()"><i class="weui-loading"></i>{lang nextpage}</a>
+<!--{/if}-->
 </div>
-<script type="text/javascript">
-    var nextpage = '{$nextpage}',morepath = '{$morepath}';
-</script>

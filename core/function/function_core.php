@@ -733,7 +733,49 @@ function avatar_group($gid,$groupcolors=array(),$class='iconFirstWord'){
 		} 
 	}
 }
-
+function getResourceByLang($flag){
+	$langset=getglobal('language');
+	if(empty($langset)) return '';
+	switch($flag){
+		case 'select2':
+			$t="static/select2/select2_locale_{lang}.js";
+			$src=str_replace('{lang}',$langset,$t);
+			if(file_exists($src)){
+				return $src;
+			}else{
+				return '';
+			}
+			break;
+		case 'datepicker':
+			$t="static/datepicker/i18n/datepicker-{lang}.js";
+			$src=str_replace('{lang}',$langset,$t);
+			if(file_exists($src)){
+				return $src;
+			}else{
+				return '';
+			}
+			break;
+		case 'timepicker':
+			$t="static/datepicker/timepicker/i18n/jquery-ui-timepicker-{lang}.js";
+			$src=str_replace('{lang}',$langset,$t);
+			if(file_exists($src)){
+				return $src;
+			}else{
+				return '';
+			}
+			break;
+		case 'ueditor':
+			$t="dzz/system/ueditor/lang/{lang}/{lang}.js";
+			$src=str_replace('{lang}',strtolower($langset),$t);
+			if(file_exists($src)){
+				return $src;
+			}else{
+				return '';
+			}
+			break;
+				
+	}
+}
 function checkLanguage()
 {
     global $_G;
@@ -2485,11 +2527,11 @@ function check_remote_file_exists($url, $proxy = '')
         curl_setopt($curl, CURLOPT_TIMEOUT, 5);
 
         if ($proxy) {
-            curl_setopt($ch, CURLOPT_PROXY, $proxy);
+            curl_setopt($curl, CURLOPT_PROXY, $proxy);
         }
         // 不取回数据
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_setopt($curl, CURLOPT_REFERER, '');
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET'); //不加这个会返回403，加了才返回正确的200，原因不明
@@ -2637,7 +2679,7 @@ function getTxtAttachByMd5($message, $filename_title, $ext)
             'unrun' => $unrun,
             'dateline' => $_G['timestamp'],
         );
-        if (!$attach['aid'] = DB::insert('attachment', ($attach), 1)) {
+        if (!$attach['aid'] = C::t('attachment')->insert($attach, 1)) {
             return false;
         }
         try {

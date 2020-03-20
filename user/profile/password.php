@@ -85,7 +85,6 @@ if($do == 'editpass'){
         }
 
         if($password && C::t('user')->update_password($_G['uid'],$password)){
-
             showTips(array('success'=>lang('update_password_success')), $type);
             exit();
         }
